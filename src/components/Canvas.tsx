@@ -148,8 +148,8 @@ const Canvas: React.FC<CanvasProps> = ({ width, height }) => {
   }
 
   return (
-    <div className="flex flex-col justify-center items-center h-full ">
-      <div className="flex gap-20  w-full items-center px-10">
+    <div className="flex flex-col justify-center items-center h-full">
+      <div className="flex gap-20 w-full items-center px-10">
         <div className="grid w-full max-w-sm items-center gap-1.5">
           <Label htmlFor="colorPicker">Pen Color</Label>
           <Input
@@ -178,12 +178,12 @@ const Canvas: React.FC<CanvasProps> = ({ width, height }) => {
           ref={canvasRef}
           width={width}
           height={height}
-          className={`border max-w-full max-h-[80vh] bg-transparent rounded-lg shadow-md cursor-crosshair`}
+          className={`border max-w-full max-h-[50vh] sm:max-h-[80vh] bg-transparent rounded-lg shadow-md cursor-crosshair`}
           style={{ touchAction: "none" }}
         />
       </div>
 
-      <div className="flex justify-between items-center gap-4">
+      <div className="flex justify-between items-center gap-4 mt-4 sm:mt-0">
         <Button variant="destructive" onClick={clearCanvas}>
           Clear
         </Button>

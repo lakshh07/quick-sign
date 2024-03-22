@@ -12,7 +12,7 @@ export default function Home() {
           </h2>
         </div>
 
-        <p className="mt-2 text-lg leading-8 text-gray-600">
+        <p className="mt-2 text-md sm:text-lg text-center leading-8 text-gray-600">
           Easily Create Your Signature in PNG Format Instantly
         </p>
       </div>
