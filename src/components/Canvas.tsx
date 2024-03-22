@@ -3,7 +3,7 @@ import React, { useRef, useEffect, useState } from "react";
 import { Input } from "./ui/input";
 import { Button } from "./ui/button";
 import { Label } from "./ui/label";
-
+import { toast } from "sonner";
 interface CanvasProps {
   width: number;
   height: number;
@@ -11,7 +11,7 @@ interface CanvasProps {
 
 const Canvas: React.FC<CanvasProps> = ({ width, height }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const [penSize, setPenSize] = useState<number>(1);
+  const [penSize, setPenSize] = useState<number>(1.5);
   const [penColor, setPenColor] = useState<string>("#000000");
 
   useEffect(() => {
@@ -46,6 +46,7 @@ const Canvas: React.FC<CanvasProps> = ({ width, height }) => {
 
       [lastX, lastY] = [pos.x, pos.y];
     }
+
     function stopDrawing() {
       isDrawing = false;
     }
@@ -100,12 +101,50 @@ const Canvas: React.FC<CanvasProps> = ({ width, height }) => {
     };
   }, [penColor, penSize]);
 
-  function saveImage() {
+  function saveSignature() {
+    toast("Signature saved", {
+      description: "starting download...",
+    });
     const canvas = canvasRef.current;
     if (!canvas) return;
 
     const imgData = canvas.toDataURL("image/png");
-    localStorage.setItem("savedDrawing", imgData);
+    const link = document.createElement("a");
+
+    localStorage.setItem("savedSignature", imgData);
+    link.href = imgData;
+    link.download = "signature.png";
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  }
+
+  function getRetrieveSignature() {
+    clearCanvas();
+    const savedSignature = localStorage.getItem("savedSignature");
+    if (savedSignature) {
+      const canvas = canvasRef.current;
+      if (!canvas) return;
+
+      const ctx = canvas.getContext("2d");
+      if (!ctx) return;
+
+      const img = new Image();
+      img.onload = () => {
+        ctx.drawImage(img, 0, 0);
+      };
+      img.src = savedSignature;
+    }
+  }
+
+  function clearCanvas() {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return;
+
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
   }
 
   return (
@@ -145,13 +184,13 @@ const Canvas: React.FC<CanvasProps> = ({ width, height }) => {
       </div>
 
       <div className="flex justify-between items-center gap-4">
-        <Button variant="destructive" onClick={saveImage}>
+        <Button variant="destructive" onClick={clearCanvas}>
           Clear
         </Button>
-        <Button variant={"secondary"} onClick={saveImage}>
+        <Button variant={"secondary"} onClick={getRetrieveSignature}>
           Retrieve Signature
         </Button>
-        <Button onClick={saveImage}>Save and Download</Button>
+        <Button onClick={saveSignature}>Save and Download</Button>
       </div>
     </div>
   );
