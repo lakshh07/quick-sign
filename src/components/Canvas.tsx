@@ -139,7 +139,7 @@ const Canvas: React.FC<CanvasProps> = ({ width, height }) => {
           ref={canvasRef}
           width={width}
           height={height}
-          className={`border max-w-full max-h-[80vh] bg-transparent rounded-lg shadow-md cursor-grab`}
+          className={`border max-w-full max-h-[80vh] bg-transparent rounded-lg shadow-md cursor-crosshair`}
           style={{ touchAction: "none" }}
         />
       </div>
